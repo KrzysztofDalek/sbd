@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 741U_SU)" ts="2018-05-27 21:18:00">
+<Class name="User.Basket">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor</Super>
+<TimeChanged>64795,76473.56476</TimeChanged>
+<TimeCreated>64793,85207.221505</TimeCreated>
+
+<Property name="Id">
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="IdIndex">
+<Properties>Id</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="IdProduct">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="IdBuyer">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="DateAdd">
+<Type>%Date</Type>
+</Property>
+
+<Method name="BuyAlcohol">
+<FormalSpec>product:Product,buyer:Buyer</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	if product.Type = "Alco" && buyer.BirthDate < "27/05/2000"
+	Return "You can't buy alcohol"
+	else
+	Return " You buy it"
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^User.BasketD</DataLocation>
+<DefaultData>BasketDefaultData</DefaultData>
+<IdLocation>^User.BasketD</IdLocation>
+<IndexLocation>^User.BasketI</IndexLocation>
+<StreamLocation>^User.BasketS</StreamLocation>
+<Data name="BasketDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Id</Value>
+</Value>
+<Value name="3">
+<Value>IdProduct</Value>
+</Value>
+<Value name="4">
+<Value>IdBuyer</Value>
+</Value>
+<Value name="5">
+<Value>DateAdd</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.Buyer">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,User.Person</Super>
+<TimeChanged>64795,2922.24621</TimeChanged>
+<TimeCreated>64793,84763.536382</TimeCreated>
+
+<Method name="BuyProduct">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[	Return "Give me some products"
+]]></Implementation>
+</Method>
+
+<Method name="GetValueWallet">
+<ReturnType>%Float</ReturnType>
+<Implementation><![CDATA[	Return ..Wallet
+]]></Implementation>
+</Method>
+
+<Method name="AddBasket">
+<FormalSpec>produkt:Product,basket:Basket</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	
+	set basket.IdProduct = produkt.Id
+	set basket.DateAdd = $HOROLOG
+	return "Dodano"
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^User.BuyerD</DataLocation>
+<DefaultData>BuyerDefaultData</DefaultData>
+<IdLocation>^User.BuyerD</IdLocation>
+<IndexLocation>^User.BuyerI</IndexLocation>
+<StreamLocation>^User.BuyerS</StreamLocation>
+<Data name="BuyerDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>PESEL</Value>
+</Value>
+<Value name="4">
+<Value>Wallet</Value>
+</Value>
+<Value name="5">
+<Value>JoinDate</Value>
+</Value>
+<Value name="6">
+<Value>BirthDate</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.Dealer">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,User.Person</Super>
+<TimeChanged>64795,72120.903793</TimeChanged>
+<TimeCreated>64793,84741.285995</TimeCreated>
+
+<Method name="BuyProduct">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[	Return "Welcome in my big shop"
+]]></Implementation>
+</Method>
+
+<Method name="AreYouAdult">
+<FormalSpec>buyer:Buyer</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	set birth = buyer.BirthDate
+	set now = $HOROLOG
+	set year = $ZDATE(now,3)
+	set age = (year) - birth
+	
+	if age > 18
+	return "true"
+	else 
+	return "false"
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^User.DealerD</DataLocation>
+<DefaultData>DealerDefaultData</DefaultData>
+<IdLocation>^User.DealerD</IdLocation>
+<IndexLocation>^User.DealerI</IndexLocation>
+<StreamLocation>^User.DealerS</StreamLocation>
+<Data name="DealerDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>PESEL</Value>
+</Value>
+<Value name="4">
+<Value>Wallet</Value>
+</Value>
+<Value name="5">
+<Value>JoinDate</Value>
+</Value>
+<Value name="6">
+<Value>BirthDate</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.Person">
+<Abstract>1</Abstract>
+<TimeChanged>64794,83928.790845</TimeChanged>
+<TimeCreated>64793,85205.804973</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="VALUELIST"/>
+</Property>
+
+<Property name="PESEL">
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="PESELIndex">
+<Properties>PESEL</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Wallet">
+<Type>%Float</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="JoinDate">
+<Type>%Date</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="BirthDate">
+<Type>%Date</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="BuyProduct">
+<ReturnType>%String</ReturnType>
+</Method>
+</Class>
+
+
+
+
+<Class name="User.Product">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,User.Products</Super>
+<TimeChanged>64794,84332.409376</TimeChanged>
+<TimeCreated>64793,85206.568624</TimeCreated>
+
+<Property name="Specification">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Id">
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Type">
+<Type>%String</Type>
+</Property>
+
+<Index name="IdIndex">
+<Properties>Id</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Method name="GetSpecification">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[	Return ..Specification
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^User.ProductD</DataLocation>
+<DefaultData>ProductDefaultData</DefaultData>
+<IdLocation>^User.ProductD</IdLocation>
+<IndexLocation>^User.ProductI</IndexLocation>
+<StreamLocation>^User.ProductS</StreamLocation>
+<Data name="ProductDefaultData">
+<Structure>listnode</Structure>
+<Subscript/>
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>Id</Value>
+</Value>
+<Value name="4">
+<Value>Type</Value>
+</Value>
+<Value name="5">
+<Value>Price</Value>
+</Value>
+<Value name="6">
+<Value>Specification</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.Products">
+<Abstract>1</Abstract>
+<TimeChanged>64794,83921.281786</TimeChanged>
+<TimeCreated>64793,84340.63664</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Price">
+<Type>%Float</Type>
+<Required>1</Required>
+</Property>
+</Class>
+
+
+<Class name="User.Shop">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor</Super>
+<TimeChanged>64795,74960.993586</TimeChanged>
+<TimeCreated>64793,84763.102517</TimeCreated>
+
+<Property name="Id">
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="IdIndex">
+<Properties>Id</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Name">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="City">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="From">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[	Return ..City
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^User.ShopD</DataLocation>
+<DefaultData>ShopDefaultData</DefaultData>
+<IdLocation>^User.ShopD</IdLocation>
+<IndexLocation>^User.ShopI</IndexLocation>
+<StreamLocation>^User.ShopS</StreamLocation>
+<Data name="ShopDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Id</Value>
+</Value>
+<Value name="3">
+<Value>Name</Value>
+</Value>
+<Value name="4">
+<Value>City</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>
